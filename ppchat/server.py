@@ -2,38 +2,71 @@
 # -*- coding: UTF-8 -*-
 
 import asyncio
+import logging
+import sys
+from ppchat.config import CONFIG_TEST as CONFIG
 
-class EchoServerClientProtocol(asyncio.Protocol):
+SERVER_ADDRESS = CONFIG['serverip'], CONFIG['serverport']
+SEPR = CONFIG['seperator']
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(name)s: %(message)s',
+    stream=sys.stderr,
+)
+
+class EchoServer(asyncio.Protocol):
+    transport = None
+    buffer = None
+    
     def connection_made(self, transport):
-        peername = transport.get_extra_info('peername')
-        print('Connection from {}'.format(peername))
         self.transport = transport
+        self.address = transport.get_extra_info('peername')
+        self.buffer = ''
+        self.log = logging.getLogger('EchoServer_{}_{}'.format(*self.address))
+        self.log.debug('connection accepted')
 
     def data_received(self, data):
-        message = data.decode()
-        print('Data received: {!r}'.format(message))
+        self.log.debug('received {!r}'.format(data))
+        self.buffer += data.decode()
+        self.check_buffer()
 
-        print('Send: {!r}'.format(message))
-        self.transport.write(data)
+    def eof_received(self):
+        self.check_buffer(flush=True)
+        self.log.debug('received EOF')
+        if self.transport.can_write_eof():
+            self.transport.write_eof()
 
-        print('Close the client socket')
-        self.transport.close()
+    def connection_lost(self, error):
+        if error:
+            self.log.error('ERROR: {}'.format(error))
+        else:
+            self.log.debug('closing')
+        super().connection_lost(error)
+
+    def check_buffer(self, flush=False):
+        if SEPR in self.buffer or flush:
+            messages = self.buffer.split(SEPR)[0]
+            data = messages.encode()
+            self.transport.write(data)
+            self.log.debug('sent {!r}'.format(data))
 
 
 if __name__ == "__main__":
+    log = logging.getLogger('main')
+    # Create the server and let the loop finish the coroutine before
+    # starting the real event loop.
     loop = asyncio.get_event_loop()
-    # Each client connection will create a new protocol instance
-    coro = loop.create_server(EchoServerClientProtocol, '127.0.0.1', 8888)
+    coro = loop.create_server(EchoServer, *SERVER_ADDRESS)
     server = loop.run_until_complete(coro)
+    log.debug('starting up on {} port {}'.format(*SERVER_ADDRESS))
 
-    # Serve requests until Ctrl+C is pressed
-    print('Serving on {}'.format(server.sockets[0].getsockname()))
+    # Enter the event loop permanently to handle all connections.
     try:
         loop.run_forever()
-    except KeyboardInterrupt:
-        print('Close the server')
-
-    # Close the server
-    server.close()
-    loop.run_until_complete(server.wait_closed())
-    loop.close()
+    finally:
+        log.debug('closing server')
+        server.close()
+        loop.run_until_complete(server.wait_closed())
+        log.debug('closing event loop')
+        loop.close()

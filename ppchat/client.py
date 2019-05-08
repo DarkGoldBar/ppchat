@@ -7,7 +7,6 @@ import logging
 import sys
 from ppchat.config import CONFIG_TEST as CONFIG
 
-SERVER_ADDRESS = CONFIG['serverip'], CONFIG['serverport']
 SEPR = CONFIG['seperator']
 
 logging.basicConfig(
@@ -25,7 +24,6 @@ class EchoClient(asyncio.Protocol):
         self.messages = messages
         self.log = logging.getLogger('EchoClient')
         self.future = future
-        self.buffer = list()
 
     def connection_made(self, transport):
         self.transport = transport
@@ -62,13 +60,14 @@ if __name__ == "__main__":
         b'This is the message. ',
         b'It will be sent ',
         b'in parts.',
+        SEPR.encode(),
     ]
 
     loop = asyncio.get_event_loop()
 
     client_completed = asyncio.Future()
     client_factory = functools.partial(EchoClient,messages=MESSAGES,future=client_completed)
-    coro = loop.create_connection(client_factory, *SERVER_ADDRESS)
+    coro = loop.create_connection(client_factory, CONFIG['serverip'], CONFIG['serverport'])
 
     log.debug('waiting for client to complete')
     try:

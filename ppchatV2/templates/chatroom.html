@@ -1,0 +1,26 @@
+{% extends "main.html.j2" %}
+{% block head %}
+<style>
+  .textbox {
+    height: 600;
+    padding: 10px;
+    BORDER: #303030 1px solid;
+    BACKGROUND-COLOR: #faf7dd;
+  }
+</style>
+{% endblock head %}
+{% block pagetitle %}
+聊天
+{% endblock pagetitle %}
+{% block content %}
+<div class=textbox>
+  {% for msg in messages %}
+    
+  {% endfor %}
+</div>
+<form method=post>
+  <input type=text name=message autocomplete=off>
+  <input type=submit value=Send>
+</form>
+{{ prcid }}
+{% endblock %}

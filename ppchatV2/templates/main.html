@@ -21,30 +21,30 @@
       padding: 5px;
     }
     .left_bar {
-      height: 100%;
       padding: 10px;
-      BORDER-right: #6fba2c 1px solid;
+      BORDER: #6fba2c 1px solid;
       BACKGROUND-COLOR: #f5fcf5;
     }
   </style>
+  {% block head %}{% endblock head %}
 </head>
 <body>
   <table class="top_bar" >
     <tbody>
       <tr>
         <td>
-{% if session["username"] %}
-          你好，{{ session["username"] }}  <a href="/logout">登出</a>
-{% else %}
-          <form action="" method="post">
-              你的名字: <input type=text name=username>  <input type=submit value=Login>
-          </form>
-{% endif %}
+          {% if session["username"] %}
+          你好，{{ session["username"] }} <a href="/logout">登出</a>
+          {% else %}
+          你好 {{ request["remote_addr"] }} 
+          {% endif %}
         </td>
       </tr>
     </tbody>
   </table>
-  <h1>{{ pagetitle }}</h1>
+  {% block title %}
+  <h1>主页</h1>
+  {% endblock title %}
   <table>
     <tbody>
       <tr>
@@ -54,6 +54,19 @@
             <tr><td><a href="/chatroom">聊天</a></td></tr>
             <tr><td><a href="/idgen">身份生成</a></td></tr>
           </table>
+        </td>
+        <td width=10px ></td>
+        <td>
+          {% block content %}
+          Welcome on my awesome homepage.<br>
+          {% if session["username"] %}
+            你好，{{ session["username"] }}  <a href="/logout">登出</a>
+          {% else %}
+          <form action="" method="post">
+            你的名字: <input type=text name=username>  <input type=submit value=Login>
+          </form>
+          {% endif %}
+          {% endblock content %}
         </td>
       </tr>
     </tbody>

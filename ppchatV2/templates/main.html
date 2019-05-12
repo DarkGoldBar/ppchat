@@ -1,0 +1,61 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <TITLE>无敌杀人王的主页</TITLE>
+  <meta name="description" content="无敌杀人王的主页">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+  <link rel="manifest" href="{{ url_for('static', filename='/site.webmanifest') }}">
+  <style>
+    .top_bar {
+      BORDER-TOP-WIDTH: 0px;
+      BORDER-LEFT-WIDTH: 0px;
+      BORDER-RIGHT-WIDTH: 0px;
+      MARGIN-TOP: 1px;
+      OVERFLOW: hidden;
+      WIDTH: 100%;
+      BORDER-BOTTOM: #6fba2c 2px solid;
+      BACKGROUND-COLOR: #f7fcf5;
+      padding: 5px;
+    }
+    .left_bar {
+      height: 100%;
+      padding: 10px;
+      BORDER-right: #6fba2c 1px solid;
+      BACKGROUND-COLOR: #f5fcf5;
+    }
+  </style>
+</head>
+<body>
+  <table class="top_bar" >
+    <tbody>
+      <tr>
+        <td>
+{% if session["username"] %}
+          你好，{{ session["username"] }}  <a href="/logout">登出</a>
+{% else %}
+          <form action="" method="post">
+              你的名字: <input type=text name=username>  <input type=submit value=Login>
+          </form>
+{% endif %}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h1>{{ pagetitle }}</h1>
+  <table>
+    <tbody>
+      <tr>
+        <td class="left_bar">
+          <table>
+            <tr><td><a href="/">主页</a></td></tr>
+            <tr><td><a href="/chatroom">聊天</a></td></tr>
+            <tr><td><a href="/idgen">身份生成</a></td></tr>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>

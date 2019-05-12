@@ -1,26 +1,50 @@
-{% extends "main.html.j2" %}
+{% extends "main.html" %}
 {% block head %}
 <style>
   .textbox {
-    height: 600;
+    height: 450;
+    width: 100%;
     padding: 10px;
     BORDER: #303030 1px solid;
     BACKGROUND-COLOR: #faf7dd;
   }
+  .msg_self{
+    color: orange;
+  }
+  .msg_other{
+    color: orchid;
+  }
 </style>
 {% endblock head %}
-{% block pagetitle %}
+{% block title %}
 聊天
-{% endblock pagetitle %}
+{% endblock title %}
 {% block content %}
-<div class=textbox>
-  {% for msg in messages %}
-    
-  {% endfor %}
-</div>
-<form method=post>
-  <input type=text name=message autocomplete=off>
-  <input type=submit value=Send>
+
+<table>
+  <tr>
+    <td>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="textbox">
+      {% for msg in messages %}
+      {% if msg.from == session.username %}
+        <span class="msg_self">
+      {% else %}
+        <span class="msg_other">
+      {% endif %}
+        {{ msg.from }}&nbsp;{{ msg.time_send }}
+        </span><br>
+        {{ msg.text }}<br>
+      {% endfor %}
+    </td>
+  </tr>
+</table>
+<form method="post">
+  <input type="text" name="message" autocomplete="off">
+  <input type="submit" value="Send">
 </form>
 {{ prcid }}
 {% endblock %}

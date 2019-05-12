@@ -21,6 +21,7 @@
       padding: 5px;
     }
     .left_bar {
+      width: 70px;
       padding: 10px;
       BORDER: #6fba2c 1px solid;
       BACKGROUND-COLOR: #f5fcf5;
@@ -33,10 +34,10 @@
     <tbody>
       <tr>
         <td>
-          {% if session["username"] %}
-          你好，{{ session["username"] }} <a href="/logout">登出</a>
+          {% if session.username %}
+          你好，{{ session.username }} <a href="/logout">登出</a>
           {% else %}
-          你好 {{ request["remote_addr"] }} 
+          你好 {{ request.remote_addr }} 
           {% endif %}
         </td>
       </tr>
@@ -59,8 +60,8 @@
         <td>
           {% block content %}
           Welcome on my awesome homepage.<br>
-          {% if session["username"] %}
-            你好，{{ session["username"] }}  <a href="/logout">登出</a>
+          {% if session.username %}
+            你好，{{ session.username }}  <a href="/logout">登出</a>
           {% else %}
           <form action="" method="post">
             你的名字: <input type=text name=username>  <input type=submit value=Login>

@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+# -*- coding: UTF-8 -*-
 import random, sys, os, time
 import numpy as np
 

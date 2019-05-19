@@ -10,7 +10,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     <title>无敌杀人王的主页</title>
-    <link href="{{ url_for('static', filename='dist/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='assets/css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -43,8 +43,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">主页</a></li>
-            <li><a href="#about">关于我</a></li>
+            <li class="active"><a href="{{ url_for('index') }}">主页</a></li>
+            <li><a href="{{ url_for('about') }}">关于我</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">应用 <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -55,7 +55,11 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            {% if session.username %}
+            <li><a href="{{ url_for('logout') }}">登出 </a></li>
+            {% else %}
             <li><a href="{{ url_for('login') }}">登录 </a></li>
+            {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -63,20 +67,13 @@
 
     <div class="container">
 
-      <!-- Main component for a primary marketing message or call to action -->
+      {% block container %}
       <div class="jumbotron">
-        {% block heading %}
         <h1>主页</h1>
-        <p>This example is a quick exercise to illustrate how the default, static and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
-        <p>To see the difference between static and fixed top navbars, just scroll.</p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>
-        </p>
-        {% endblock heading %}
+        <p>这是一个什么都没有的主页</p>
+        <p>你好，{{ request.remote_addr }} </p>
       </div>
-      {% block content %}
-      <p>Content</p>
-      {% endblock content %}
+      {% endblock container %}
     </div> <!-- /container -->
 
     <!-- Bootstrap core JavaScript
@@ -84,9 +81,9 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script>window.jQuery || document.write('<script src="{{ url_for('static', filename='assets/js/vendor/jquery.min.js') }}"><\/script>')</script>
-    <script src="{{ url_for('static', filename='dist/css/bootstrap.css') }}"></script>
+    <script src="{{ url_for('static', filename='dist/js/bootstrap.min.js') }}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="{{ url_for('static', filename='assets/css/ie10-viewport-bug-workaround.css') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/ie10-viewport-bug-workaround.js') }}"></script>
 
   </body>
 </html>

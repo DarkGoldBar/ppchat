@@ -1,12 +1,9 @@
-{% extends "main.html" %}
-{% block title %}
-身份生成
-{% endblock title %}
-{% block content %}
+{% extends "bs-base.html" %}
+{% block container %}
 <form action="" method="post">
   指定地区(选填6位)&nbsp; <input type="text" name="region_code" maxlength=6 ><br>
   指定生日(选填8位)&nbsp; <input type="text" name="date_code" maxlength=8 ><br>
   <input type="submit" value="Gen"><br>
 </form>
 {{ prcid }}
-{% endblock %}
+{% endblock container %}

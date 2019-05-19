@@ -12,15 +12,19 @@ def root():
 
 @app.route('/index')
 def index():
-    if request.method == 'POST':
-        session['username'] = request.form['username']
-        return redirect(url_for("index"))
-    html = render_template('bs-base.html')
-    return html
+    return render_template('bs-base.html')
 
-@app.route('/login')
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return redirect(url_for('index'))
+    if request.method == 'POST':
+        session['username'] = request.form['inputUsername']
+        session['password'] = request.form['inputPassword']
+        return redirect(url_for("index"))
+    return render_template('login.html')
 
 @app.route('/logout')
 def logout():
@@ -55,9 +59,9 @@ def chatroom():
     html = render_template('chatroom.html', messages=messages)
     return html
 
-@app.errorhandler(500)
-def page_error(e):
-    return render_template('error.html'), 500
+# @app.errorhandler(500)
+# def page_error(e):
+#     return render_template('error.html'), 500
 
 # @app.errorhandler(404)
 # def page_error(e):

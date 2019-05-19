@@ -6,13 +6,21 @@ from chatroom import myMessage
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
+def root():
+    return redirect(url_for('index'))
+
+@app.route('/index')
 def index():
     if request.method == 'POST':
         session['username'] = request.form['username']
         return redirect(url_for("index"))
-    html = render_template('main.html')
+    html = render_template('bs-base.html')
     return html
+
+@app.route('/login')
+def login():
+    return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():

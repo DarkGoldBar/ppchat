@@ -1,8 +1,11 @@
 #! /usr/bin/python3
 # -*- coding: UTF-8 -*-
+import time
+
 from flask import Flask, session, redirect, url_for, escape, request, render_template
 from idgen import gen_once 
 from chatroom import myMessage
+from user import UserControl
 
 app = Flask(__name__)
 
@@ -35,15 +38,26 @@ def logout():
 @app.route('/idgen', methods=['GET', 'POST'])
 def idgen():
     if request.method == 'POST':
-        region_code = request.form.get('region_code')
+        region_code = request.form.get('inputRegion')
         region_code = int(region_code) if region_code else None
-        date_code = request.form.get('date_code')
+        date_code = request.form.get('inputDate')
         date_code = int(date_code) if date_code else None
-        prcid = gen_once(region_code, date_code)
-        html = render_template('idgen.html', prcid=prcid)
+        data = {
+            'date': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+            'idnum': gen_once(region_code, date_code),
+            'comment': "No comment"
+        }
+        idgen_history = session.get("idgen_history")
+        if not idgen_history:
+            idgen_history = [data]
+        else:
+            idgen_history.insert(0, data)
+        if len(idgen_history) > 10:
+            idgen_history.pop(-1)
+        session["idgen_history"] = idgen_history
+        return redirect("idgen")
     else:
-        html = render_template('idgen.html')
-    return html
+        return render_template('idgen.html', idgen_history = session.get("idgen_history", []))
 
 @app.route('/chatroom', methods=['GET', 'POST'])
 def chatroom():

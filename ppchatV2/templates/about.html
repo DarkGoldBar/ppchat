@@ -1,4 +1,8 @@
 {% extends "bs-base.html" %}
+{% block navbar_select %}
+<li><a href="{{ url_for('index') }}">主页</a></li>
+<li class="active"><a href="{{ url_for('about') }}">关于我</a></li>
+{% endblock navbar_select %}
 {% block container %}
 <div class="jumbotron">
   <h2>关于我</h2>

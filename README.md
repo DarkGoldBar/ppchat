@@ -1,8 +1,7 @@
-# ppchat
+# ppchatV1
 python asyncio socket test
+too hard to manage sessions
 
-After considering about user login, I think i can use a package to do this, instade of doit my self
-
-Use Flask Next Project
-
-END
+# ppchatV2
+Flask + bootstrap
+working

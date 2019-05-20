@@ -72,4 +72,4 @@ app.secret_key = b'b\xd1\x10#\xe3\xca\xfd\\A\x10\xffh\xff\xbc\x92\x10<\x92\x11G[
 app.permanent_session_lifetime = 3600*24*7
 
 if __name__ == "__main__":
-    app.run(host='192.168.0.107', debug=True)
+    app.run(host='0.0.0.0', debug=True, port=6778)

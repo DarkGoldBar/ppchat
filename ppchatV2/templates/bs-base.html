@@ -73,7 +73,11 @@
       <div class="jumbotron">
         <h1>主页</h1>
         <p>这是一个什么都没有的主页</p>
+        {% if session.username %}
+        <p>你好，{{ session.username }} </p>
+        {% else %}
         <p>你好，{{ request.remote_addr }} </p>
+        {% endif %}
       </div>
       {% endblock container %}
     </div> <!-- /container -->

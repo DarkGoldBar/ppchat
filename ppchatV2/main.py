@@ -1,11 +1,13 @@
 #! /usr/bin/python3
 # -*- coding: UTF-8 -*-
 import time
+import random
 
+import flask
 from flask import Flask, session, redirect, url_for, escape, request, render_template
-from idgen import gen_once 
-from chatroom import myMessage
-from user import UserControl
+
+from .idgen import gen_once 
+from .models import myUser, myMessage
 
 app = Flask(__name__)
 
@@ -13,8 +15,11 @@ app = Flask(__name__)
 def root():
     return redirect(url_for('index'))
 
-@app.route('/index')
+@app.route('/index', methods=["GET", "POST"])
 def index():
+    if request.method == 'POST':
+        flask.flash(random.choice(["wow", "yeah", "nice", "right", "ouch", "ohh"]))
+        return redirect(url_for('index'))
     return render_template('bs-base.html')
 
 @app.route('/about')
@@ -24,15 +29,18 @@ def about():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == 'POST':
-        session['username'] = request.form['inputUsername']
-        session['password'] = request.form['inputPassword']
+        username = request.form['inputUsername']
+        password = request.form['inputPassword']
+        user = myUser(username)
+        if user.authorize(password):
+            session["username"] = username
         return redirect(url_for("index"))
     return render_template('login.html')
 
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
-    session.pop('username', None)
+    session.clear()
     return redirect(url_for('index'))
 
 @app.route('/idgen', methods=['GET', 'POST'])

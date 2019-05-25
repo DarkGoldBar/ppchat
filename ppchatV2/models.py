@@ -13,10 +13,12 @@ class myUser():
     def authorize(self, password):
         query = {"username": self.username}
         response = DBUserinfo.find_one(query)
-        if response["password"] == password:
-            self.is_authenticated = True
-            return True
-        return False
+        if response:
+            if response["password"] == password:
+                self.is_authenticated = True
+                return 200
+            return 401
+        return 404
 
 
 class myMessage():

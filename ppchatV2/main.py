@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 # -*- coding: UTF-8 -*-
 import time
+import json
 import random
 
 import flask
@@ -32,9 +33,14 @@ def login():
         username = request.form['inputUsername']
         password = request.form['inputPassword']
         user = myUser(username)
-        if user.authorize(password):
+        retcode = user.authorize(password)
+        if retcode == 200:
             session["username"] = username
-        return redirect(url_for("index"))
+            return redirect(url_for("index"))
+        elif retcode == 401:
+            return render_template('login.html', alert=render_template('alert.html', type="alert-warning", heading="登录失败", text="密码错误"))
+        elif retcode == 404:
+            return render_template('login.html', alert=render_template('alert.html', type="alert-warning", heading="登录失败", text="没有该用户"))
     return render_template('login.html')
 
 @app.route('/logout')
@@ -80,6 +86,11 @@ def chatroom():
     messages.append(myMessage("system", session['username'], "Hello, user"))
     html = render_template('chatroom.html', messages=messages)
     return html
+
+@app.route('/ajax_api', methods=['GET', 'POST'])
+def ajax():
+    if request.method == "GET":
+        return render_template('alert.html', type="alert-success", heading="AJAX成功", text=json.dumps(request.args)) 
 
 # @app.errorhandler(500)
 # def page_error(e):

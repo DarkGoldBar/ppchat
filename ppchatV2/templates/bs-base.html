@@ -68,12 +68,12 @@
     </nav>
 
     <div class="container">
-
+      <div id="myAlertTop"></div>
       {% block container %}
-      <div class="alert alert-danger alert-dismissible fade in" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-          <h4>Oh snap! You got an error!</h4>
-          <p>Change this and that and try again. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p>
+      <div class="alert alert-info alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4>Alert Test!</h4>
+        <p>这是一个提示测试</p>
       </div>
       <div class="jumbotron">
         <h1>主页</h1>
@@ -82,11 +82,15 @@
         <p>你好，{{ session.username }} </p>
         {% else %}
         <p>你好，{{ request.remote_addr }} </p>
-        <form method="post">
-          <button class="btn btn-primary" type="submit">>>></button>
-        </form>
         {% endif %}
       </div>
+      <button class="btn btn-primary" type="submit">>>>AlertBySelf</button>
+      <button class="btn btn-primary" type="submit" onclick=ajaxtest()>>>>AlertByAjax</button>
+      <script>
+        function ajaxtest(){
+          ajaxGet("myAlertTop", "arg1=123&arg2=abc")
+        }
+      </script>
       {% endblock container %}
     </div> <!-- /container -->
 
@@ -98,6 +102,8 @@
     <script src="{{ url_for('static', filename='dist/js/bootstrap.min.js') }}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{{ url_for('static', filename='assets/js/ie10-viewport-bug-workaround.js') }}"></script>
+    <!-- myscript -->
+    <script src="{{ url_for('static', filename='ajax.js') }}"></script>
 
   </body>
 </html>

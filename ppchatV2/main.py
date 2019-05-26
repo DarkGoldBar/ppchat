@@ -9,6 +9,7 @@ from flask import Flask, session, redirect, url_for, escape, request, render_tem
 
 from .idgen import gen_once 
 from .models import myUser, myMessage
+from .components import myAlert
 
 app = Flask(__name__)
 
@@ -38,9 +39,9 @@ def login():
             session["username"] = username
             return redirect(url_for("index"))
         elif retcode == 401:
-            return render_template('login.html', alert=render_template('alert.html', type="alert-warning", heading="登录失败", text="密码错误"))
+            return render_template('login.html', alert=myAlert.format(type="warning", heading="登录失败", text="密码错误"))
         elif retcode == 404:
-            return render_template('login.html', alert=render_template('alert.html', type="alert-warning", heading="登录失败", text="没有该用户"))
+            return render_template('login.html', alert=myAlert.format(type="warning", heading="登录失败", text="没有该用户"))
     return render_template('login.html')
 
 @app.route('/logout')
